@@ -35,7 +35,7 @@ This is an Express-based application built with TypeScript, designed to manage a
 3. Navigate to the project folder:
    
    ```bash
-   cd bikestore
+   cd bike_store_server
    ```
 5. Install the dependencies:
    
