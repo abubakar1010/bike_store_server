@@ -4,6 +4,7 @@ import {
     findSpecificProduct,
     insertProduct,
     isProductExist,
+    UpdateProduct,
 } from './product.services';
 import productValidationSchema from './product.validation';
 import { z } from 'zod';
@@ -80,7 +81,7 @@ const getAllProducts = async (req: Request, res: Response) => {
 
 const getSpecificProducts = async (req: Request, res: Response) => {
     try {
-        const {productId} = req.params;
+        const { productId } = req.params;
         const product = await findSpecificProduct(productId);
         if (!product) throw new Error('Product not found');
         res.status(200).json({
@@ -106,6 +107,33 @@ const getSpecificProducts = async (req: Request, res: Response) => {
     }
 };
 
+const updateProduct = async (req: Request, res: Response) => {
+    try {
+        const { productId } = req.params;
+        const data = req.body;
+        const updatedProduct = await UpdateProduct(productId, data);
+        if (!updatedProduct) throw new Error('Product not found');
+        res.status(200).json({
+            message: 'Bikes retrieved successfully',
+            success: true,
+            data: updatedProduct,
+        });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            res.status(500).json({
+                message: error.message || 'Something went wrong',
+                success: false,
+                error: error,
+                stack: error.stack,
+            });
+        } else {
+            res.status(500).json({
+                message: 'Unknown error occurred',
+                success: false,
+                error: error,
+            });
+        }
+    }
+};
 
-
-export { createProduct, getAllProducts, getSpecificProducts };
+export { createProduct, getAllProducts, getSpecificProducts, updateProduct };
