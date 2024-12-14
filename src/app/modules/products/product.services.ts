@@ -28,4 +28,9 @@ const updateAndGetProduct = async <T extends IProduct>(
     return product;
 };
 
-export { isProductExist, insertProduct, findAllProducts, findSpecificProduct, updateAndGetProduct };
+const removeProduct = async(productId: string) => {
+    const deleteInfo = await Product.deleteOne({_id: productId})
+    return deleteInfo
+}
+
+export { isProductExist, insertProduct, findAllProducts, findSpecificProduct, updateAndGetProduct, removeProduct };
