@@ -4,7 +4,7 @@ import {
     findSpecificProduct,
     insertProduct,
     isProductExist,
-    UpdateProduct,
+    updateAndGetProduct,
 } from './product.services';
 import productValidationSchema from './product.validation';
 import { z } from 'zod';
@@ -111,10 +111,10 @@ const updateProduct = async (req: Request, res: Response) => {
     try {
         const { productId } = req.params;
         const data = req.body;
-        const updatedProduct = await UpdateProduct(productId, data);
+        const updatedProduct = await updateAndGetProduct(productId, data);
         if (!updatedProduct) throw new Error('Product not found');
         res.status(200).json({
-            message: 'Bikes retrieved successfully',
+            message: 'Bikes updated successfully',
             success: true,
             data: updatedProduct,
         });
