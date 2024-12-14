@@ -28,30 +28,38 @@ This is an Express-based application built with TypeScript, designed to manage a
 ### Installation
 
 1. Clone the repository:
+   
    ```bash
    git clone https://github.com/abubakar1010/bike_store_server.git
-2. Navigate to the project folder:
+   ```
+3. Navigate to the project folder:
+   
    ```bash
    cd bikestore
-3. Install the dependencies:
+   ```
+5. Install the dependencies:
+   
    ```bash
    npm i
-4. Set up your MongoDB database 
-5. Create a .env file to store your MongoDB URI and other configurations(follow the example.env file)
-6. Run the application
+   ```
+7. Set up your MongoDB database
+8. Create a .env file to store your MongoDB URI and other configurations.Use the example.env file as a reference
+9. Run the application
+    
     ```bash
     npm run dev
+    ```
     
     
  ## API Endpoints
  
 ### 1. Products (Bikes)
 
-- Create Bike: POST /api/products
-- Get All Bike: GET /api/products?searchField=value. searchField can be name, brand, or category.
-- Get Specific Bike: GET /api/products/:id
-- Update Bike: PUT /api/products/:id
-- Delete Bike: DELETE /api/products/:id
+- **Create Bike:** POST /api/products
+- **Get All Bike:** GET /api/products?searchField=value. searchField can be name, brand, or category.
+- **Get Specific Bike:** GET /api/products/:id
+- **Update Bike:** PUT /api/products/:id
+- **Delete Bike:** DELETE /api/products/:id
 ### 2. Orders
-- Create Order: POST /api/orders
-- Get Total Revenue: GET /api/orders/revenue
+- **Create Order:** POST /api/orders
+- **Get Total Revenue:** GET /api/orders/revenue
