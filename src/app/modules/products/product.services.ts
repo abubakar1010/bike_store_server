@@ -6,18 +6,26 @@ const isProductExist = async (name: string) => {
     return isExist;
 };
 
-const insertProduct = async(productData: IProduct) => {
-    const createdProduct = await Product.create(productData)
-    return createdProduct
-}
+const insertProduct = async (productData: IProduct) => {
+    const createdProduct = await Product.create(productData);
+    return createdProduct;
+};
 
-const findAllProducts = async(query: IProductQuery) => {
-    const products = await Product.find(query)
-    return products
-}
-const findSpecificProduct = async(productId: string) => {
-    const product = await Product.findById(productId)
-    return product
-}
+const findAllProducts = async (query: IProductQuery) => {
+    const products = await Product.find(query);
+    return products;
+};
+const findSpecificProduct = async (productId: string) => {
+    const product = await Product.findById(productId);
+    return product;
+};
 
-export { isProductExist,insertProduct, findAllProducts, findSpecificProduct };
+const updateAndGetProduct = async <T extends IProduct>(
+    productId: string,
+    document: Partial<T>,
+) => {
+    const product = await Product.findOneAndUpdate({ _id: productId }, document, {new: true});
+    return product;
+};
+
+export { isProductExist, insertProduct, findAllProducts, findSpecificProduct, updateAndGetProduct };
