@@ -1,3 +1,4 @@
+import { IProduct } from './product.interface';
 import { Product } from './products.model';
 
 const isProductExist = async (name: string) => {
@@ -5,4 +6,9 @@ const isProductExist = async (name: string) => {
     return isExist;
 };
 
-export { isProductExist };
+const insertProduct = async(productData: IProduct) => {
+    const createdProduct = await Product.create(productData)
+    return createdProduct
+}
+
+export { isProductExist,insertProduct };
