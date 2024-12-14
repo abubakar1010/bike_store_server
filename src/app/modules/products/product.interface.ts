@@ -1,5 +1,6 @@
+import { Document } from "mongoose";
 
-export interface IProduct{
+export interface IProduct extends Document{
     name: string;
     brand: string;
     price: number;
@@ -9,4 +10,8 @@ export interface IProduct{
     inStock: boolean;
 };
 
-
+export interface IProductQuery{
+    name?: string;
+    brand?: string;
+    category?: string;
+}
