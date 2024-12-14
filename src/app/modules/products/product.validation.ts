@@ -7,7 +7,7 @@ const productValidationSchema = z.object({
     category: z.enum(['Mountain', 'Road', 'Hybrid', 'Electric'], {
         message: 'Category must be one of: Mountain, Road, Hybrid, Electric',
     }),
-    description: z.string().min(20, { message: 'Description is required' }),
+    description: z.string().min(1, { message: 'Description is required' }),
     quantity: z.number().int().nonnegative({
         message: 'Quantity must be a non-negative integer',
     }),
