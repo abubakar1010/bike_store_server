@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import {
     findAllProducts,
+    findSpecificProduct,
     insertProduct,
     isProductExist,
 } from './product.services';
@@ -77,4 +78,34 @@ const getAllProducts = async (req: Request, res: Response) => {
     }
 };
 
-export { createProduct, getAllProducts };
+const getSpecificProducts = async (req: Request, res: Response) => {
+    try {
+        const {productId} = req.params;
+        const product = await findSpecificProduct(productId);
+        if (!product) throw new Error('Product not found');
+        res.status(200).json({
+            message: 'Bikes retrieved successfully',
+            success: true,
+            data: product,
+        });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            res.status(500).json({
+                message: error.message || 'Something went wrong',
+                success: false,
+                error: error,
+                stack: error.stack,
+            });
+        } else {
+            res.status(500).json({
+                message: 'Unknown error occurred',
+                success: false,
+                error: error,
+            });
+        }
+    }
+};
+
+
+
+export { createProduct, getAllProducts, getSpecificProducts };
