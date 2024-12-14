@@ -22,7 +22,10 @@ const orderSchema = new Schema<IOrder>(
             required: true
         }
 
+    },
+    {
+        timestamps: true
     }
 )
 
-export const Order = model("Order", orderSchema)
+export const Order = model<IOrder>("Order", orderSchema)
