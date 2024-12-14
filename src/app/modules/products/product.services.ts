@@ -15,5 +15,9 @@ const findAllProducts = async(query: IProductQuery) => {
     const products = await Product.find(query)
     return products
 }
+const findSpecificProduct = async(productId: string) => {
+    const product = await Product.findById(productId)
+    return product
+}
 
-export { isProductExist,insertProduct, findAllProducts };
+export { isProductExist,insertProduct, findAllProducts, findSpecificProduct };
