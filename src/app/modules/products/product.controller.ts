@@ -25,7 +25,7 @@ const createProduct = async (req: Request, res: Response) => {
         res.status(201).json({
             message: 'Bike Created Successfully',
             success: true,
-            data: productData,
+            data: createdProduct,
         });
     } catch (error: unknown) {
         if (error instanceof z.ZodError) {
