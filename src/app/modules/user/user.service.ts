@@ -27,7 +27,7 @@ const createUserIntoDB = async (file: any, payload: TUser) => {
 };
 
 const getAllUsersFromDB = async (query: Record<string, unknown>) => {
-    const userQuery = new QueryBuilder(User.find({ role: 'user' }), query)
+    const userQuery = new QueryBuilder(User.find({}).select('-password'), query)
         .search(userSearchableFields)
         .filter()
         .sort()
@@ -44,7 +44,7 @@ const getAllUsersFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getSingleUserFromDB = async (id: string) => {
-    const result = await User.findById(id);
+    const result = await User.findById(id).select('-password');
     return result;
 };
 
@@ -52,7 +52,7 @@ const updateUserIntoDB = async (id: string, payload: Partial<TUser>) => {
     const result = await User.findByIdAndUpdate(id, payload, {
         new: true,
         runValidators: true,
-    });
+    }).select('-password');
     return result;
 };
 
@@ -61,7 +61,7 @@ const deleteUserFromDB = async (id: string) => {
         id,
         { isDeleted: true },
         { new: true },
-    );
+    ).select('-password');
 
     if (!deletedUser) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Failed to delete user');
@@ -73,7 +73,7 @@ const deleteUserFromDB = async (id: string) => {
 const changeStatus = async (id: string, payload: { status: string }) => {
     const result = await User.findByIdAndUpdate(id, payload, {
         new: true,
-    });
+    }).select('-password');
     return result;
 };
 

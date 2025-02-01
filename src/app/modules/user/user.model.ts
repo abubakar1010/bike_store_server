@@ -18,7 +18,6 @@ const userSchema = new Schema<TUser, UserModel>(
         password: {
             type: String,
             required: true,
-            select: 0,
         },
         profileImg: {
             type: String,
@@ -50,6 +49,7 @@ const userSchema = new Schema<TUser, UserModel>(
 
 userSchema.pre('save', async function (next) {
     const user = this;
+    console.log('this--', this);
     // hash password
     user.password = await bcrypt.hash(
         user.password,
@@ -67,6 +67,7 @@ userSchema.statics.isPasswordMatched = async function (
     password,
     hashedPassword,
 ) {
+    console.log('first', password, hashedPassword);
     return await bcrypt.compare(password, hashedPassword);
 };
 

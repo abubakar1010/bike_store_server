@@ -73,7 +73,8 @@ const createOrder = async (req: Request, res: Response) => {
 const generateRevenue = async (req: Request, res: Response) => {
     try {
         const revenue = await calculateRevenue();
-        if(revenue <= 0) throw new Error("Something went wrong while calculating revenue")
+        if (revenue <= 0)
+            throw new Error('Something went wrong while calculating revenue');
         res.status(200).json({
             message: 'Revenue calculated successfully',
             status: true,
@@ -99,4 +100,3 @@ const generateRevenue = async (req: Request, res: Response) => {
     }
 };
 export { createOrder, generateRevenue };
-

@@ -1,6 +1,6 @@
-import { model, Schema } from "mongoose";
-import { IOrder } from "./order.interface";
-import { Product } from "../products/products.model";
+import { model, Schema } from 'mongoose';
+import { IOrder } from './order.interface';
+import { Product } from '../products/products.model';
 
 const orderSchema = new Schema<IOrder>(
     {
@@ -9,23 +9,22 @@ const orderSchema = new Schema<IOrder>(
             required: true,
         },
         product: {
-            type:  Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: Product,
-            required: true
+            required: true,
         },
-        quantity:{
+        quantity: {
             type: Number,
-            required: true
+            required: true,
         },
-        totalPrice:{
+        totalPrice: {
             type: Number,
-            required: true
-        }
-
+            required: true,
+        },
     },
     {
-        timestamps: true
-    }
-)
+        timestamps: true,
+    },
+);
 
-export const Order = model<IOrder>("Order", orderSchema)
+export const Order = model<IOrder>('Order', orderSchema);

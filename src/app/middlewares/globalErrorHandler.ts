@@ -1,10 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import {
-    ErrorRequestHandler,
-    NextFunction,
-} from 'express';
+import { ErrorRequestHandler, NextFunction } from 'express';
 import config from '../config';
 import handleCastError from '../errors/handleCastError';
 import handleDuplicateError from '../errors/handleDuplicateError';

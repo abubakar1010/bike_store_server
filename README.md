@@ -4,7 +4,7 @@
 
 This is an Express-based application built with TypeScript, designed to manage a Bike Store. The app uses MongoDB with Mongoose to handle bike products and customer orders. It supports full CRUD operations for managing bike products and processing orders. Additionally, it provides functionality to calculate total revenue from all orders.
 
-### liveLink 
+### liveLink
 
 <a href="https://bike-store-server-ebon.vercel.app">Bike Store </a>
 
@@ -28,31 +28,33 @@ This is an Express-based application built with TypeScript, designed to manage a
 ### Installation
 
 1. Clone the repository:
-   
-   ```bash
-   git clone https://github.com/abubakar1010/bike_store_server.git
-   ```
-3. Navigate to the project folder:
-   
-   ```bash
-   cd bike_store_server
-   ```
-5. Install the dependencies:
-   
-   ```bash
-   npm i
-   ```
-7. Set up your MongoDB database
-8. Create a .env file to store your MongoDB URI and other configurations.Use the example.env file as a reference
-9. Run the application
-    
+
+    ```bash
+    git clone https://github.com/abubakar1010/bike_store_server.git
+    ```
+
+2. Navigate to the project folder:
+
+    ```bash
+    cd bike_store_server
+    ```
+
+3. Install the dependencies:
+
+    ```bash
+    npm i
+    ```
+
+4. Set up your MongoDB database
+5. Create a .env file to store your MongoDB URI and other configurations.Use the example.env file as a reference
+6. Run the application
+
     ```bash
     npm run dev
     ```
-    
-    
- ## API Endpoints
- 
+
+## API Endpoints
+
 ### 1. Products (Bikes)
 
 - **Create Bike:** POST /api/products
@@ -60,6 +62,8 @@ This is an Express-based application built with TypeScript, designed to manage a
 - **Get Specific Bike:** GET /api/products/:id
 - **Update Bike:** PUT /api/products/:id
 - **Delete Bike:** DELETE /api/products/:id
+
 ### 2. Orders
+
 - **Create Order:** POST /api/orders
 - **Get Total Revenue:** GET /api/orders/revenue

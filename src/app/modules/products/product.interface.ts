@@ -1,6 +1,6 @@
-import { Document } from "mongoose";
+import { Document } from 'mongoose';
 
-export interface IProduct extends Document{
+export interface IProduct extends Document {
     name: string;
     brand: string;
     price: number;
@@ -8,9 +8,9 @@ export interface IProduct extends Document{
     description: string;
     quantity: number;
     inStock: boolean;
-};
+}
 
-export interface IProductQuery{
+export interface IProductQuery {
     name?: string;
     brand?: string;
     category?: string;

@@ -8,7 +8,6 @@ import { createToken } from './auth.utils';
 import ApiError from '../../utils/apiError';
 
 const loginUser = async (payload: TLoginUser) => {
-
     // checking if the user is exist
     const user = await User.findOne({ email: payload.email });
 
@@ -36,7 +35,7 @@ const loginUser = async (payload: TLoginUser) => {
 
     //checking if the password is correct
 
-    console.log(user)
+    console.log(user);
 
     if (!(await User.isPasswordMatched(payload?.password, user?.password)))
         throw new ApiError(httpStatus.FORBIDDEN, 'Password do not matched');
