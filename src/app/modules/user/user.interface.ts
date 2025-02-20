@@ -10,7 +10,7 @@ export interface TUser {
     contactNo?: string;
     address?: string;
     status: 'active' | 'deActive';
-    role: 'admin' | 'user';
+    role: 'admin' | 'customer';
     isDeleted: boolean;
 }
 

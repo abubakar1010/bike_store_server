@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
-import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 import ApiError from '../../utils/apiError';
 import { User } from './user.model';
 import QueryBuilder from '../../utils/queryBuilder';
@@ -8,15 +7,6 @@ import { userSearchableFields } from './constant';
 import { TUser } from './user.interface';
 
 const createUserIntoDB = async (file: any, payload: TUser) => {
-    if (file) {
-        const imageName = `${payload?.name}`;
-        const path = file?.path;
-
-        //send image to cloudinary
-        const { secure_url } = await sendImageToCloudinary(imageName, path);
-        payload.profileImg = secure_url as string;
-    }
-
     // create a user
     const newUser = await User.create(payload);
 

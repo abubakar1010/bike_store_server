@@ -12,14 +12,14 @@ const loginUser = async (payload: TLoginUser) => {
     const user = await User.findOne({ email: payload.email });
 
     if (!user) {
-        throw new ApiError(httpStatus.NOT_FOUND, 'This user is not found !');
+        throw new ApiError(httpStatus.FORBIDDEN, 'Invalid Credential!');
     }
     // checking if the user is already deleted
 
     const isDeleted = user?.isDeleted;
 
     if (isDeleted) {
-        throw new ApiError(httpStatus.FORBIDDEN, 'This user is deleted !');
+        throw new ApiError(httpStatus.FORBIDDEN, 'Your account is already deleted !');
     }
 
     // checking if the user is blocked
@@ -29,7 +29,7 @@ const loginUser = async (payload: TLoginUser) => {
     if (userStatus === 'deActive') {
         throw new ApiError(
             httpStatus.FORBIDDEN,
-            'This user account is deactivate ! !',
+            'Your account is deactivated ! !',
         );
     }
 
@@ -38,7 +38,7 @@ const loginUser = async (payload: TLoginUser) => {
     console.log(user);
 
     if (!(await User.isPasswordMatched(payload?.password, user?.password)))
-        throw new ApiError(httpStatus.FORBIDDEN, 'Password do not matched');
+        throw new ApiError(httpStatus.FORBIDDEN, 'Invalid credential');
 
     //create token and sent to the  client
 

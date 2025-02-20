@@ -9,7 +9,7 @@ router.post('/auth/login', AuthControllers.loginUser);
 
 router.post(
     '/auth/change-password',
-    auth(USER_ROLE.user, USER_ROLE.admin),
+    auth(USER_ROLE.customer, USER_ROLE.admin),
     AuthControllers.changePassword,
 );
 

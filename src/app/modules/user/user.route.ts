@@ -18,7 +18,7 @@ router.get('/users/:id', UserControllers.getSingleUser);
 
 router.patch(
     '/users/:id',
-    auth(USER_ROLE.admin, USER_ROLE.user),
+    auth(USER_ROLE.admin, USER_ROLE.customer),
     UserControllers.updateUser,
 );
 
