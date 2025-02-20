@@ -9,6 +9,7 @@ import ApiError from '../../utils/apiError';
 
 const loginUser = async (payload: TLoginUser) => {
     // checking if the user is exist
+    console.log(payload)
     const user = await User.findOne({ email: payload.email });
 
     if (!user) {

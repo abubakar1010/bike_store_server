@@ -18,7 +18,7 @@ const handleDuplicateError = (err: any): TGenericErrorResponse => {
 
     return {
         statusCode,
-        message: 'Invalid ID',
+        message: 'Oops! This value is already taken. Try something different.',
         errorSources,
     };
 };

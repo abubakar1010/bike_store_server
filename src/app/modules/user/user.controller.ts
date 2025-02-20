@@ -6,7 +6,7 @@ import apiResponse from '../../utils/apiResponse';
 const createUser = handleAsync(async (req, res) => {
     const userData = req.body;
 
-    const result = await UserServices.createUserIntoDB(req.file, userData);
+    const result = await UserServices.createUserIntoDB( userData);
 
     apiResponse(res, {
         statusCode: httpStatus.OK,

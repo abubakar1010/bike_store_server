@@ -6,7 +6,7 @@ import QueryBuilder from '../../utils/queryBuilder';
 import { userSearchableFields } from './constant';
 import { TUser } from './user.interface';
 
-const createUserIntoDB = async (file: any, payload: TUser) => {
+const createUserIntoDB = async ( payload: TUser) => {
     // create a user
     const newUser = await User.create(payload);
 

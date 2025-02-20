@@ -12,14 +12,45 @@ const app = express();
 
 app.use(
     cors({
-        origin: 'http://localhost:5173',
-        credentials: true,
+        origin: ['http://localhost:5173'], // Add frontend URLs
+        credentials: true, // Allow cookies/auth headers
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
+        allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
     }),
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // routes
+
+// Handle Preflight Requests
+app.options('*', cors());
+
+// Ensure CORS headers in all responses
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); // Adjust for production
+    res.header(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PUT, DELETE, OPTIONS',
+    );
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+});
+
+app.options('*', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+    res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PUT, DELETE, OPTIONS',
+    );
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization',
+    );
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.status(200).send(); // Ensure preflight returns 200 OK
+});
 
 app.use('/api', productRoute);
 app.use('/api', OrderRoute);
