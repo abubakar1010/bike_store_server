@@ -1,5 +1,7 @@
-import { IProduct, IProductQuery } from './product.interface';
+import QueryBuilder from '../../utils/queryBuilder';
+import { IProduct } from './product.interface';
 import { Product } from './products.model';
+import { productSearchableTerm } from './product.constant';
 
 const isProductExist = async (name: string) => {
     const isExist = await Product.findOne({ name });
@@ -12,9 +14,22 @@ const insertProduct = async (productData: IProduct) => {
     return createdProduct;
 };
 
-const findAllProducts = async (query: IProductQuery) => {
-    const products = await Product.find(query);
-    return products;
+const findAllProducts = async (query: Record<string, unknown>) => {
+    const productQuery = new QueryBuilder(
+        Product.find(),
+        query,
+      )
+        .search(productSearchableTerm)
+        .filter()
+        .sort()
+        .paginate()
+    
+      const result = await productQuery.modelQuery;
+      const meta = await productQuery.countTotal();
+    return {
+        meta,
+        result
+    };
 };
 const findSpecificProduct = async (productId: string) => {
     const product = await Product.findById(productId);

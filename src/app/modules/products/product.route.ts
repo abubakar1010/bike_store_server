@@ -6,10 +6,11 @@ import {
     getSpecificProducts,
     updateProduct,
 } from './product.controller';
+import { upload } from '../../utils/sendImageToCloudinary';
 
 const router = Router();
 
-router.route('/products').post(createProduct);
+router.route('/products').post(upload.single('file'), createProduct);
 router.route('/products').get(getAllProducts);
 router.route('/products/:productId').get(getSpecificProducts);
 router.route('/products/:productId').put(updateProduct);

@@ -14,6 +14,10 @@ const createProduct = async (req: Request, res: Response) => {
     try {
         const productData = req.body;
 
+        const image = req.file;
+
+        console.log(image)
+
         productValidationSchema.parse(productData);
 
         const productAlreadyExist = await isProductExist(productData.name);

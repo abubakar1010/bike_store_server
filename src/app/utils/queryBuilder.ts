@@ -27,13 +27,37 @@ class QueryBuilder<T> {
 
     filter() {
         const queryObj = { ...this.query };
-
-        const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-
+        const excludeFields = ['searchTerm', 'sortBy', 'sortOrder', 'limit'];
+        // Remove exclude fields and any null or undefined values
         excludeFields.forEach((el) => delete queryObj[el]);
+        Object.keys(queryObj).forEach((key) => {
+            if (queryObj[key] == null || queryObj[key] === '') {
+                delete queryObj[key];
+            }
+        });
+        if (queryObj.availability) {
+            queryObj.inStock = queryObj.availability === 'inStock';
+            delete queryObj['availability'];
+        }
+        if (queryObj.priceRange) {
+        
+            if (typeof queryObj.priceRange === 'string') {
+                const [min, max] = queryObj.priceRange.split(',').map(Number);
+
+                // Explicitly initialize price as an object
+                queryObj.price = {} as { $gte?: number; $lte?: number };
+
+                if (!isNaN(min)) {
+                    (queryObj.price as { $gte?: number }).$gte = min;
+                }
+                if (!isNaN(max)) {
+                    (queryObj.price as { $lte?: number }).$lte = max;
+                }
+            }
+            delete queryObj.priceRange; 
+        }
 
         this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
-
         return this;
     }
 
