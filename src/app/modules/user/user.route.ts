@@ -25,7 +25,7 @@ router.patch(
 router.delete('/users/:id', auth(USER_ROLE.admin), UserControllers.deleteUser);
 
 router.patch(
-    '/users/change-status/:id',
+    '/auth/update-user-status',
     auth(USER_ROLE.admin),
     UserControllers.changeStatus,
 );

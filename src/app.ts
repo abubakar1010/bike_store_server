@@ -14,7 +14,7 @@ app.use(
     cors({
         origin: ['http://localhost:5173'], // Add frontend URLs
         credentials: true, // Allow cookies/auth headers
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
+        methods: ['GET', 'POST','PATCH', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
         allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
     }),
 );
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); // Adjust for production
     res.header(
         'Access-Control-Allow-Methods',
-        'GET, POST, PUT, DELETE, OPTIONS',
+        'GET, POST, PUT, DELETE, OPTIONS,PATCH',
     );
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.header('Access-Control-Allow-Credentials', 'true');
@@ -42,7 +42,7 @@ app.options('*', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
     res.setHeader(
         'Access-Control-Allow-Methods',
-        'GET, POST, PUT, DELETE, OPTIONS',
+        'GET, POST, PUT, DELETE, OPTIONS,PATCH',
     );
     res.setHeader(
         'Access-Control-Allow-Headers',

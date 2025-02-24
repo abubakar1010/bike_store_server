@@ -62,9 +62,8 @@ const loginUser = async (payload: TLoginUser) => {
 
 const changePassword = async (
     userData: JwtPayload,
-    payload: { oldPassword: string; newPassword: string },
+    payload: { currentPassword: string; newPassword: string },
 ) => {
-    // checking if the user is exist
     const user = await User.findOne({ email: userData.email });
 
     if (!user) {
@@ -78,20 +77,18 @@ const changePassword = async (
         throw new ApiError(httpStatus.FORBIDDEN, 'This user is deleted !');
     }
 
-    // checking if the user is blocked
 
     const userStatus = user?.status;
 
     if (userStatus === 'deActive') {
         throw new ApiError(
             httpStatus.FORBIDDEN,
-            'This user account is deActive ! !',
+            'This user account is deActive',
         );
     }
 
-    //checking if the password is correct
 
-    if (!(await User.isPasswordMatched(payload.oldPassword, user?.password)))
+    if (!(await User.isPasswordMatched(payload.currentPassword, user?.password)))
         throw new ApiError(httpStatus.FORBIDDEN, 'Password do not matched');
 
     //hash new password
@@ -107,8 +104,6 @@ const changePassword = async (
         },
         {
             password: newHashedPassword,
-            needsPasswordChange: false,
-            passwordChangedAt: new Date(),
         },
     );
 
