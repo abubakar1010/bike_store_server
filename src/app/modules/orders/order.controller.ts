@@ -1,102 +1,103 @@
 import { Request, Response } from 'express';
-import {
-    calculateRevenue,
-    insertOrder,
-    isOrderAlreadyExist,
-    updateStock,
-} from './order.service';
-import orderValidationSchema from './order.validation';
-import { z } from 'zod';
-import { findSpecificProduct } from '../products/product.services';
+import { IOrder } from './order.interface';
+import handleAsync from '../../utils/handleAsync';
+import { OrderServices } from './order.service';
+import apiResponse from '../../utils/apiResponse';
+import httpStatus from 'http-status'
 
-const createOrder = async (req: Request, res: Response) => {
-    try {
-        const orderData = req.body;
-
-        orderValidationSchema.parse(orderData);
-
-        const product = await findSpecificProduct(orderData.product);
-
-        if (!product)
-            throw new Error('The product for your order does not exist.');
-
-        if (!product.inStock)
-            throw new Error('The product is currently out of stock.');
-
-        if (product.quantity < orderData.quantity)
-            throw new Error(
-                `Insufficient stock: Only ${product.quantity} units are available.`,
-            );
-
-        const orderAlreadyExist = await isOrderAlreadyExist(
-            orderData.product,
-            orderData.email,
+const orderProduct = handleAsync(async (req: Request, res: Response) => {
+        const user = req.user;
+        const orderData: IOrder = req.body;
+        const result = await OrderServices.orderProduct(
+            orderData,
+            user,
+            req.ip!,
         );
-        if (orderAlreadyExist) throw new Error('Order already exist');
-
-        const createdOrder = await insertOrder(orderData);
-        if (!createdOrder)
-            throw new Error('Something went wrong while inserting order');
-
-        await updateStock(orderData.product, orderData.quantity);
-
-        res.status(201).json({
-            message: 'Order Created Successfully',
+        res.json({
             success: true,
-            data: createdOrder,
-        });
-    } catch (error: unknown) {
-        if (error instanceof z.ZodError) {
-            res.status(500).json({
-                message: error.issues[0].message || 'Something went wrong',
-                success: false,
-                error: error,
-                stack: error.stack,
-            });
-        } else if (error instanceof Error) {
-            res.status(500).json({
-                message: error.message || 'Something went wrong',
-                success: false,
-                error: error,
-                stack: error.stack,
-            });
-        } else {
-            res.status(500).json({
-                message: 'Unknown error occurred',
-                success: false,
-                error: error,
-            });
-        }
-    }
-};
+            statusCode: httpStatus.CREATED,
+            message:
+                typeof result === 'object' && 'message' in result
+                    ? result.message
+                    : 'Order placed successfully',
+            data: result,
+        })
+})
 
-const generateRevenue = async (req: Request, res: Response) => {
+const verifyPayment = handleAsync(async (req, res) => {
+    const order = await OrderServices.verifyPayment(
+        req.query.order_id as string,
+    );
+
+    res.json({
+        statusCode: httpStatus.CREATED,
+        message: 'Order verified successfully',
+        data: order,
+    });
+});
+
+const getTotalRevenue = async (req: Request, res: Response) => {
     try {
-        const revenue = await calculateRevenue();
-        if (revenue <= 0)
-            throw new Error('Something went wrong while calculating revenue');
-        res.status(200).json({
+        const result = await OrderServices.getTotalRevenue();
+        res.json({
             message: 'Revenue calculated successfully',
             status: true,
-            data: {
-                totalRevenue: revenue,
-            },
+            data: result,
         });
     } catch (error: unknown) {
         if (error instanceof Error) {
-            res.status(500).json({
-                message: error.message || 'Something went wrong',
-                success: false,
+            res.json({
+                message: 'Error Occurred',
+                status: false,
                 error: error,
                 stack: error.stack,
             });
         } else {
-            res.status(500).json({
-                message: 'Unknown error occurred',
-                success: false,
+            res.json({
+                message: 'Error Occurred',
+                status: false,
                 error: error,
             });
         }
     }
 };
-export { createOrder, generateRevenue };
+
+const getOrdersByCustomer = handleAsync(async (req, res) => {
+    const { id } = req.params;
+    const result = await OrderServices.getOrdersByCustomer(id);
+    apiResponse(res, {
+        success: true,
+        message: 'Orders Retrieved Successfully',
+        statusCode: httpStatus.OK,
+        data: result.data,
+    });
+});
+
+const getAllOrders = handleAsync(async (req, res) => {
+    const result = await OrderServices.getAllOrders();
+    apiResponse(res, {
+        success: true,
+        message: 'Orders Retrieved Successfully',
+        statusCode: httpStatus.OK,
+        data: result.data,
+    });
+});
+
+const updateShippingStatus = handleAsync(async (req, res) => {
+    const result = await OrderServices.updateShippingStatus(req.body);
+    apiResponse(res, {
+        success: true,
+        message: 'Shipping Status Updated',
+        statusCode: httpStatus.OK,
+        data: result,
+    });
+});
+
+export const OrderControllers = {
+    orderProduct,
+    getTotalRevenue,
+    verifyPayment,
+    getOrdersByCustomer,
+    getAllOrders,
+    updateShippingStatus,
+};
