@@ -3,59 +3,34 @@ import {
     findAllProducts,
     findSpecificProduct,
     insertProduct,
-    isProductExist,
     removeProduct,
     updateAndGetProduct,
 } from './product.services';
-import productValidationSchema from './product.validation';
-import { z } from 'zod';
+import handleAsync from '../../utils/handleAsync';
+import ApiError from '../../utils/apiError';
 
-const createProduct = async (req: Request, res: Response) => {
-    try {
-        const productData = req.body;
+const createProduct = handleAsync(async (req, res) => {
 
-        const image = req.file;
-
-        console.log(image)
-
-        productValidationSchema.parse(productData);
-
-        const productAlreadyExist = await isProductExist(productData.name);
-        if (productAlreadyExist) throw new Error('Product already exist');
-
-        const createdProduct = await insertProduct(productData);
-        if (!createdProduct)
-            throw new Error('Something went wrong while inserting product');
-        res.status(201).json({
-            message: 'Bike Created Successfully',
-            success: true,
-            data: createdProduct,
-        });
-    } catch (error: unknown) {
-        if (error instanceof z.ZodError) {
-            res.status(500).json({
-                message: error.issues[0].message || 'Something went wrong',
-                success: false,
-                error: error,
-                stack: error.stack,
-            });
-        } else if (error instanceof Error) {
-            res.status(500).json({
-                message: error.message || 'Something went wrong',
-                success: false,
-                error: error,
-                stack: error.stack,
-            });
-        } else {
-            res.status(500).json({
-                message: 'Unknown error occurred',
-                success: false,
-                error: error,
-            });
+        if (!req.file) {
+            throw new ApiError(404, "Image file is required")
         }
-    }
-};
 
+        const productData = JSON.parse(req.body.data);
+
+
+        console.log(productData, req.file);
+        const result = await insertProduct(req.file, productData);
+        if (!result) {
+            throw new ApiError(500, "Failed to create Product")
+        }
+
+        res.status(201).json({
+            message: "Product created successfully",
+            success: true,
+            data: result,
+        });
+    
+});
 const getAllProducts = async (req: Request, res: Response) => {
     try {
         const queryData = req.query;
@@ -115,7 +90,8 @@ const getSpecificProducts = async (req: Request, res: Response) => {
 const updateProduct = async (req: Request, res: Response) => {
     try {
         const { productId } = req.params;
-        const data = req.body;
+        const data = JSON.parse(req.body.data);
+        console.log(req.body,productId)
         const updatedProduct = await updateAndGetProduct(productId, data);
         if (!updatedProduct) throw new Error('Product not found');
         res.status(200).json({
