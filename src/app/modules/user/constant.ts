@@ -10,4 +10,4 @@ export const userSearchableFields = [
     'presentAddress',
 ];
 
-export const userStatus = ['in-progress', 'active', 'deActive'];
+export const userStatus = ['active', 'inactive'];

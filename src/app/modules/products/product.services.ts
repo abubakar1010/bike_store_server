@@ -1,18 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import QueryBuilder from '../../utils/queryBuilder';
 import { IProduct } from './product.interface';
 import { Product } from './products.model';
 import { productSearchableTerm } from './product.constant';
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
+import ApiError from '../../utils/apiError';
 
 const isProductExist = async (name: string) => {
     const isExist = await Product.findOne({ name });
     return isExist;
 };
 
-const insertProduct = async (productData: IProduct) => {
-    await Product.create(productData);
-    const createdProduct = await Product.findOne({ name: productData.name });
-    return createdProduct;
-};
+
+const insertProduct = async (file: any, productData: IProduct) => {
+    const imageName = `${productData.year}${productData?.brand}${productData.quantity}`;
+    const { secure_url } = (await sendImageToCloudinary(
+      imageName,
+      file?.path,
+    )) as { secure_url: string };
+    const result = await Product.create(productData);
+    result.image = secure_url;
+    await result.save();
+    return result;
+  };
 
 const findAllProducts = async (query: Record<string, unknown>) => {
     const productQuery = new QueryBuilder(
@@ -38,13 +48,16 @@ const findSpecificProduct = async (productId: string) => {
 
 const updateAndGetProduct = async <T extends IProduct>(
     productId: string,
-    document: Partial<T>,
+    productData: Partial<T>,
 ) => {
     const product = await Product.findOneAndUpdate(
         { _id: productId },
-        document,
+        productData,
         { new: true },
     );
+    if(!product){
+        throw new ApiError(404, "product update operation failed")
+    }
     return product;
 };
 

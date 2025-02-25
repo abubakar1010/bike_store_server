@@ -66,9 +66,9 @@ const deleteUser = handleAsync(async (req, res) => {
 });
 
 const changeStatus = handleAsync(async (req, res) => {
-    const { id } = req.params;
 
-    const result = await UserServices.changeStatus(id, req.body);
+
+    const result = await UserServices.changeStatus(req.body);
 
     apiResponse(res, {
         statusCode: httpStatus.OK,

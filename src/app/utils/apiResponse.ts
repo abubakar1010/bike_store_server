@@ -17,10 +17,10 @@ type TResponse<T> = {
 
 const apiResponse = <T>(res: Response, data: TResponse<T>) => {
     res.status(data?.statusCode).json({
-        success: data.success,
-        message: data.message,
-        meta: data.meta,
-        data: data.data,
+        success: data?.success,
+        message: data?.message,
+        meta: data?.meta,
+        data: data?.data,
     });
 };
 

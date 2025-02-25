@@ -37,12 +37,18 @@ export const sendImageToCloudinary = (
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, process.cwd() + '/uploads/');
+         const uploadPath = "/tmp/uploads/";
+        fs.mkdirSync(uploadPath, { recursive: true }); // Ensure directory exists
+        cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(null, file.fieldname + '-' + uniqueSuffix);
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        cb(null, file.fieldname + "-" + uniqueSuffix + "." + file.mimetype.split("/")[1]);
     },
 });
 
-export const upload = multer({ storage: storage });
+export const upload = multer({
+    storage: storage,
+    // limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+});
+

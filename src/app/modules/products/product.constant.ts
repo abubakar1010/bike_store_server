@@ -1,1 +1,1 @@
-export const productSearchableTerm = ["brand", "name", "category"]
+export const productSearchableTerm = ["brand", "name", "category", "model"]

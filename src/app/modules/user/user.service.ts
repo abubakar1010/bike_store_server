@@ -60,8 +60,8 @@ const deleteUserFromDB = async (id: string) => {
     return deletedUser;
 };
 
-const changeStatus = async (id: string, payload: { status: string }) => {
-    const result = await User.findByIdAndUpdate(id, payload, {
+const changeStatus = async (payload: {id: string, status: string }) => {
+    const result = await User.findByIdAndUpdate(payload.id, {status: payload.status? "active" : "inactive"}, {
         new: true,
     }).select('-password');
     return result;
