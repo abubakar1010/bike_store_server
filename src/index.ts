@@ -4,9 +4,7 @@ import config from './app/config';
 
 async function main() {
     try {
-        const connectionInstance = await mongoose.connect(
-            'mongodb+srv://practiceDB:practiceDB@cluster0.a2ulpwj.mongodb.net/bike_store?retryWrites=true&w=majority&appName=Cluster0',
-        );
+        const connectionInstance = await mongoose.connect(config.database_url!);
         console.log(
             'Database is successfully connected!! host on',
             connectionInstance.connection.host,
