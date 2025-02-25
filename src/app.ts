@@ -12,9 +12,11 @@ const app = express();
 
 app.use(
     cors({
-        origin: ['http://localhost:5173'], // Add frontend URLs
+        origin: [
+            'https://bike-store-client.vercel.app',
+        ], // Add frontend URLs
         credentials: true, // Allow cookies/auth headers
-        methods: ['GET', 'POST','PATCH', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
+        methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
         allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
     }),
 );
@@ -28,7 +30,10 @@ app.options('*', cors());
 
 // Ensure CORS headers in all responses
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); // Adjust for production
+    res.header(
+        'Access-Control-Allow-Origin',
+        'https://bike-store-client.vercel.app',
+    ); // Adjust for production
     res.header(
         'Access-Control-Allow-Methods',
         'GET, POST, PUT, DELETE, OPTIONS,PATCH',
@@ -39,7 +44,10 @@ app.use((req, res, next) => {
 });
 
 app.options('*', (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+    res.setHeader(
+        'Access-Control-Allow-Origin',
+        'https://bike-store-client.vercel.app',
+    );
     res.setHeader(
         'Access-Control-Allow-Methods',
         'GET, POST, PUT, DELETE, OPTIONS,PATCH',
